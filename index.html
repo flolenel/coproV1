@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        @font-face {
+            font-family: 'shoplifter'; /* Nom de la police */
+            src: url('shoplifter.ttf') format('truetype'); /* Chemin vers le fichier de police */
+            /* Ajoutez d'autres formats de fichiers si nécessaire */
+        }
+
+        body {
+            font-family: 'shoplifter', sans-serif;
+            background-image: url('Images/Background\ fond\ flou.jpg'); /* Remplacez 'background.jpg' par le chemin de votre image */
+            background-size: cover; /* Assurez-vous que l'image de fond couvre entièrement l'arrière-plan */
+            background-position: center; /* Centrez l'image de fond */
+            min-height: 100vh;
+            margin: 0;
+            padding: 0;
+            padding-left: 10px; /* Réduire le padding pour les appareils mobiles */
+            position: relative; /* Position relative pour que l'image de délai soit positionnée par rapport au corps */
+        }
+
+        .player {
+            font-size: 9vw; /* Taille de police responsive */
+            font-weight: bold;
+        }
+
+        h1 {
+            font-size: 3.5vw; /* Taille de police responsive */
+            color: aliceblue;
+            text-align: center; /* Centrer le titre */
+            margin-top: 5vw; /* Espacement responsive au-dessus du titre */
+        }
+
+        h2 {
+            font-size: 2vw; /* Taille de police responsive */
+        }
+
+        .labelColor {
+            color: aliceblue;
+            font-size: 4vw; /* Taille de police responsive */
+        }
+
+        .month {
+            font-size: 9vw; /* Taille de police responsive */
+            font-weight: bold;
+            color: #ffffff; /* Couleur de texte pour les mois */
+            opacity: 0.9;
+        }
+
+        #startGame {
+            text-align: center; /* Centrer le contenu */
+            margin-top: 2vw; /* Espacement responsive au-dessus du contenu */
+        }
+
+        #startGame img {
+            width: 13vw; /* Taille responsive des images */
+            margin: 0 2vw; /* Espacement entre les images */
+            cursor: pointer; /* Curseur pointer pour indiquer que les images sont cliquables */
+        }
+
+        #startGame img:hover {
+            opacity: 0.8; /* Réduire l'opacité au survol */
+        }
+
+        #playerCountMessage {
+            text-align: center; /* Centrer le contenu */
+            color: #FFFFFF;
+            font-size: 5vw;
+        }
+
+        #message {
+            text-align: center;
+            position: absolute;
+            top: 50%;
+            left: 0;
+            transform: translateY(-50%);
+            margin-top: -2vw; /* Moitié de la taille de la police (9vw) pour centrer correctement */
+            margin-left: 5vw; /* Ajoutez un espacement à gauche de l'écran */
+            font-size: 9vw; /* Taille de police responsive */
+            font-weight: bold;
+        }
+
+        #timer {
+            text-align: center;
+            position: absolute;
+            top: 60%;
+            left: 0;
+            transform: translateY(-50%);
+            margin-top: 1vw; /* Espacement entre le message et le minuteur */
+            margin-left: 5vw; /* Ajoutez un espacement à gauche de l'écran */
+            font-size: 5vw; /* Taille de police responsive */
+            font-weight: bold;
+        }
+
+        #nextTurnButton {
+            display: block;
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            margin-bottom: 8vw; /* Ajoutez un espacement au bas de l'écran */
+            margin-right: 10vw; /* Ajoutez un espacement à droite de l'écran */
+            width: 25vw; /* Taille responsive du bouton */
+        }
+
+        #round {
+            position: absolute;
+            top: 0;
+            right: 0;
+            margin-top: 8vw; /* Ajoutez un espacement au sommet de l'écran */
+            margin-right: 10vw; /* Ajoutez un espacement à droite de l'écran */
+        }
+
+        #landscapeMessage {
+            display: none; /* Masquer le message par défaut */
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            text-align: center;
+            transform: translate(-50%, -50%);
+            background-color: rgba(0, 0, 0, 0.9);
+            color: white;
+            font-size: 8vw; /* Taille de police responsive */
+            padding: 100vw; /* Espacement responsive */
+            border-radius: 1vw; /* Bordure responsive */
+            z-index: 9999; /* S'assurer que le message est au-dessus de tout le reste */
+        }
+
+        #contentWrapper {
+            display: block; /* Afficher le contenu par défaut */
+        }
+
+        /* Media queries pour des ajustements supplémentaires */
+        @media screen and (max-width: 600px) {
+            /* Styles spécifiques pour les écrans de 600px de largeur ou moins */
+            .player {
+                font-size: 8vw; /* Taille de police encore plus grande pour les petits écrans */
+            }
+            .month {
+                font-size: 8vw; /* Taille de police encore plus grande pour les petits écrans */
+            }
+            h1 {
+                font-size: 7vw; /* Taille de police encore plus grande pour les petits écrans */
+                margin-top: 5vw; /* Espacement responsive encore plus grand pour les petits écrans */
+            }
+            h2 {
+                font-size: 4vw; /* Taille de police encore plus grande pour les petits écrans */
+            }
+            .labelColor {
+                font-size: 8vw; /* Taille de police encore plus grande pour les petits écrans */
+            }
+            #startGame {
+                margin-top: 5vw; /* Espacement responsive encore plus grand pour les petits écrans */
+            }
+            #startGame img {
+                width: 40vw; /* Taille responsive encore plus grande pour les petits écrans */
+                margin: 0 2vw; /* Espacement encore plus grand pour les petits écrans */
+            }
+            #message {
+                margin-top: 5vw; /* Espacement responsive encore plus grand pour les petits écrans */
+            }
+            #nextTurnButton {
+                margin-top: 5vw; /* Espacement responsive encore plus grand pour les petits écrans */
+                width: 40vw; /* Taille responsive encore plus grande pour les petits écrans */
+            }
+        }
+
+        /* Style pour l'image de délai */
+        #delayImage {
+            display: none; /* Cacher l'image par défaut */
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 9999; /* Assurer que l'image est au-dessus de tout */
+            cursor: pointer; /* Curseur pointer pour indiquer que l'image est cliquable */
+        }
+
+        /* Nouveau style pour l'écran d'accueil */
+        #welcomeScreen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('Images/welcome.png'); /* Image de fond de l'écran d'accueil */
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+            padding-bottom: 10vw; /* Espacement pour le bouton en bas */
+        }
+
+        /* Style pour le bouton de l'écran d'accueil */
+        #enterGameButton {
+            display: block;
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            margin-bottom: 14vw; /* Ajoutez un espacement au bas de l'écran */
+            margin-right: 1vw; /* Ajoutez un espacement à droite de l'écran */
+            width: 25vw; /* Taille responsive du bouton */
+        }
+    </style>
+</head>
+<body>
+    <div id="welcomeScreen">
+        <div id="enterGameButton" onclick="showPlayerSelectionScreen()">
+            <img src="Images/Jouer.png" alt="Enter Game">
+        </div>
+    </div>
+    <div id="landscapeMessage">
+        <p>Veuillez tourner votre smartphone pour une meilleure experience.</p>
+    </div>
+    <div id="contentWrapper">
+        <h1 id="gameTitle"></h1>
+        
+        <!-- Ajout de la phrase "Nombre de joueurs :" centrée -->
+        <div id="playerCountMessage">Nombre de joueurs: </div>
+
+        <!-- Modification : Remplacement du menu déroulant par des images -->
+        <div id="startGame">
+            <img src="Images/2_joueurs.png" alt="2 joueurs" onclick="startGame(2)">
+            <img src="Images/3_joueurs.png" alt="3 joueurs" onclick="startGame(3)">
+            <img src="Images/4_joueurs.png" alt="4 joueurs" onclick="startGame(4)">
+        </div>
+        <p id="round" class="player month"></p>
+        <p id="message" class="player"></p>
+        <p id="timer"></p>
+        <img id="nextTurnButton" src="Images/suivant_868px.png" onclick="nextTurn()" style="display: none; cursor: pointer;">
+    </div>
+    <img id="delayImage" src="Images/popup_loyer.png" onclick="closeDelayImage()">
+    
+    <script>
+        var players = [];
+        var colors = ["#D00A67", "#F9830C", "#0C7B9B", "#8FE50B"];
+        var currentTurn = 0;
+        var totalTurns = [];
+        var conciergeLastTurn = false;
+        var months = ["JANVIER", "FEVRIER", "MARS", "AVRIL", "MAI", "JUIN", "JUILLET", "AOUT", "SEPTEMBRE", "OCTOBRE", "NOVEMBRE", "DECEMBRE"];
+        var currentRound = 0;
+        var timerInterval;
+
+        function startGame(playerCount) {
+            for (var i = 1; i <= playerCount; i++) {
+                players.push("JOUEUR " + i);
+                totalTurns.push(0);
+            }
+            document.getElementById("startGame").style.display = "none";
+            document.getElementById("gameTitle").style.display = "none";
+            document.getElementById("nextTurnButton").style.display = "block";
+
+              // Masquer la phrase "Nombre de joueurs :"
+    document.getElementById("playerCountMessage").style.display = "none";
+    // Vous pouvez également ajouter d'autres manipulations d'éléments ici si nécessaire
+    
+            nextTurn();
+        }
+
+        function nextTurn() {
+            var messageElement = document.getElementById("message");
+            var roundElement = document.getElementById("round");
+            var timerElement = document.getElementById("timer");
+
+            if (totalTurns.every(turn => turn >= 12)) {
+                messageElement.innerHTML = "FIN DE LA PARTIE";
+                messageElement.style.color = "aliceblue";
+                document.getElementById("nextTurnButton").disabled = true;
+                return;
+            }
+
+            var playerColor = colors[currentTurn];
+    
+            messageElement.innerHTML = " " + players[currentTurn];
+            messageElement.style.color = playerColor; // Mise à jour de la couleur du message
+            timerElement.style.color = playerColor; // Mise à jour de la couleur du décompte
+
+            clearInterval(timerInterval);
+
+            var random;
+            if (players.length === 2) {
+                random = Math.floor(Math.random() * 5.33);
+            } else if (players.length === 3) {
+                random = Math.floor(Math.random() * 6.55);
+            } else if (players.length === 4) {
+                random = Math.floor(Math.random() * 7.4);
+            }
+            if (random === 0 && !conciergeLastTurn && totalTurns[currentTurn] > 0) {
+                if (Math.random() < 0.5) {
+                    messageElement.innerHTML = "LA<br>CONCIERGE<br>ARRIVE";
+                    document.body.style.backgroundImage = "url('Images/background_concierge.jpg')";
+                    timerElement.style.display = "none"; // Cacher le minuteur lorsque la concierge arrive
+                } else {
+                    messageElement.innerHTML = "LE<br>COURRIER<br>EST RELEVE";
+                    document.body.style.backgroundImage = "url('Images/background_lettre.png')";
+                    timerElement.style.display = "none"; // Cacher le minuteur lorsque le courrier est relevé
+                }
+                messageElement.style.color = "red";
+                conciergeLastTurn = true;
+            } else {
+                if (totalTurns[currentTurn] < 12) {
+                    messageElement.innerHTML = " " + players[currentTurn];
+                    messageElement.style.color = colors[currentTurn];
+                    totalTurns[currentTurn]++;
+                    if (currentTurn === 0) {
+                        roundElement.innerHTML = " " + months[currentRound];
+                        currentRound++;
+                    }
+                }
+                currentTurn = (currentTurn + 1) % players.length;
+                conciergeLastTurn = false;
+                document.body.style.backgroundImage = "url('Images/Background\ fond\ flou.jpg')";
+                timerElement.style.display = "block"; // Afficher le minuteur sur les écrans des joueurs
+                startTimer(120); // Lancer le décompte de 120 secondes uniquement sur les écrans des joueurs
+            }
+        }
+
+        function startTimer(duration) {
+            var timerDisplay = document.getElementById("timer");
+            var timer = duration;
+            timerInterval = setInterval(function () {
+                var minutes = Math.floor(timer / 60);
+                var seconds = timer % 60;
+                timerDisplay.innerHTML = minutes + "m " + seconds + "s";
+                if (--timer < 0) {
+                    clearInterval(timerInterval);
+                    document.getElementById("delayImage").style.display = "block";
+                }
+            }, 1000);
+        }
+
+        function closeDelayImage() {
+            document.getElementById("delayImage").style.display = "none";
+        }
+
+        function detectOrientation() {
+            setTimeout(function() {
+                if (window.matchMedia("(orientation: portrait)").matches) {
+                    document.getElementById("landscapeMessage").style.display = "block";
+                    document.getElementById("contentWrapper").style.display = "none";
+                } else {
+                    document.getElementById("landscapeMessage").style.display = "none";
+                    document.getElementById("contentWrapper").style.display = "block";
+                }
+            }, 20);
+        }
+
+        function showPlayerSelectionScreen() {
+            document.getElementById("welcomeScreen").style.display = "none";
+            document.getElementById("contentWrapper").style.display = "block";
+        }
+
+        window.addEventListener("load", detectOrientation);
+        window.addEventListener("orientationchange", detectOrientation);
+    </script>
+</body>
+</html>
